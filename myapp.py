@@ -1,10 +1,20 @@
 from flask import Flask, render_template, send_from_directory
+import os
+import paho.mqtt.client as mqtt
+client = mqtt.Client()
+client.connect("moorhouseassociates.com", 1883, 60)
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-	return render_template("index.html", to="Sylva")
+	return render_template("index.html", to="Sam moorhouse")
+
+@app.route('/btn')
+def btn():
+	print("button clicked")
+	client.publish("test/all", "this is my message to Sam")
+	return ""
 
 @app.route('/css/<path:path>')
 def send_css(path):
